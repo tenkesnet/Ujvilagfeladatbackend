@@ -1,0 +1,15 @@
+{
+    "name": "bardo/ujvilagbackend",
+    "autoload": {
+        "psr-4": {
+            "Bardo\\Ujvilagbackend\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "tenkesnet",
+            "email": "rbardo@gmail.com"
+        }
+    ],
+    "require": {}
+}
