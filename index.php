@@ -2,7 +2,6 @@
 require './vendor/autoload.php';
 
 use Bardo\Ujvilagbackend\Service\MysqlDatabase;
-use Bardo\Ujvilagbackend\Service\Database;
 use Bardo\Ujvilagbackend\Init;
 use Bardo\Ujvilagbackend\Model\EmployeeRepository;
 use Bardo\Ujvilagbackend\Model\ProductRepository;
@@ -21,7 +20,7 @@ $employeeRepository = new EmployeeRepository($db);
 
 $parsed_url = parse_url($_SERVER['REQUEST_URI']);
 $method = $_SERVER['REQUEST_METHOD'];
-
+error_log($method);
 error_log($parsed_url['path']);
 
 if (isset($parsed_url['path'])) {
@@ -88,18 +87,20 @@ if ($path_function == "searchProducts" && strlen($param1) > 0) {
   return;
 }
 
-if ($path_function == "updateProducts" && $method == "POST") {
+if ($path_function == "updateProduct" && $method == "POST") {
   $data = json_decode(file_get_contents('php://input'));
-  error_log($data);
-  // $products = $productRepository->searchProducts($param1, $param2);
-  // $productsArray = [];
-  // foreach ($products as $product) {
-  //   $array = json_decode(json_encode($product), true);
-  //   $productsArray[] = $array;
-  // }
-  // $result = json_encode($productsArray);
-  // MyHeader();
-  // echo $result;
+  $product = new Product();
+  foreach ($data as $key => $value) {
+    if ($key == "purchaseDate") {
+      $date = objectToObject($data->purchaseDate, DateTime::class);
+      $product->{'purchaseDate'} = $date;
+    } else {
+      $product->{$key} = $value;
+    }
+  }
+  $productRepository->updateProduct($product);
+  MyHeader();
+  echo "";
   return;
 }
 
@@ -115,4 +116,14 @@ function MyHeader()
   header('Access-Control-Allow-Origin: *');
   header('Access-Control-Allow-Methods: GET, POST');
   header("Access-Control-Allow-Headers: *");
+}
+
+function objectToObject($instance, $className): DateTime
+{
+  return unserialize(sprintf(
+    'O:%d:"%s"%s',
+    strlen($className),
+    $className,
+    strstr(strstr(serialize($instance), '"'), ':')
+  ));
 }

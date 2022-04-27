@@ -28,18 +28,17 @@ class Init
         )";
     $this->_db->execute($sql);
     $sql = "CREATE TABLE productname(
-          id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+          productid INT UNSIGNED not null,
+          language varchar(3) not null,
           name varchar(255) NOT NULL,
-          language VARCHAR(3) NOT NULL
+          primary key(productid,language)
       )";
     $this->_db->execute($sql);
 
     $sql = "CREATE TABLE products (
           id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
           sku varchar(20) NOT NULL,
-          product_number varchar(20) NOT NULL,
-          productnameid int unsigned NOT NULL,
-          CONSTRAINT FK_ProductsName FOREIGN KEY (productnameid) REFERENCES productname(id)
+          product_number varchar(20) NOT NULL
 
     )";
 
@@ -89,7 +88,7 @@ class Init
     ";
     $this->_db->execute($sql);
 
-    $sql = "INSERT INTO productname (id,name,language) VALUES
+    $sql = "INSERT INTO productname (productid,name,language) VALUES
             (1,'HP 1020 nyomtató', 'hu'),
             (2,'Irodaszék', 'hu'),
             (3,'asztal', 'hu'),
@@ -124,36 +123,36 @@ class Init
 
 
 
-    $sql = "INSERT INTO products ( sku, product_number,productnameid ) VALUES
-            ('3478J','AR456SJJ',1),
-            ('5721J','vLRrxqUW',2),
-            ('2393J','teNYpjM9',3),
-            ('3196J','GnVUCKys',4),
-            ('7136J','j6EvCtWu',5),
-            ('4688J','rk5vDckm',6),
-            ('6401J','T87TTaew',7),
-            ('3795J','RrtLvTjq',8),
-            ('4963J','czxaATmj',9),
-            ('9461J','ciaCbj3G',10),
-            ('6822J','TnNJVYcr',11),
-            ('8722J','sacNBtvw',12),
-            ('9829J','DcQDLK6Y',13),
-            ('5339J','9gZHdhdn',14),
-            ('3319J','CHVtZ64X',15),
-            ('5237J','5jCQMgyB',16),
-            ('5135J','Xtd3h6r4',17),
-            ('2888J','oaarFeen',18),
-            ('4863J','5m5HjigG',19),
-            ('2725J','cHyiySqn',20),
-            ('2410J','3qNLnWiX',21),
-            ('4652J','VzdmujuZ',22),
-            ('5293J','3ZqH7DNX',23),
-            ('6698J','EB-2247U',24),
-            ('6911J','ZGtc4ouy',25),
-            ('4396J','ZGtc4ouy',26),
-            ('2745J','YFwXnJyj',27),
-            ('9817J','uqfYPc4V',28),
-            ('9382J','qH9HumL9',29)
+    $sql = "INSERT INTO products ( id, sku, product_number) VALUES
+            (1,'3478J','AR456SJJ'),
+            (2,'5721J','vLRrxqUW'),
+            (3,'2393J','teNYpjM9'),
+            (4,'3196J','GnVUCKys'),
+            (5,'7136J','j6EvCtWu'),
+            (6,'4688J','rk5vDckm'),
+            (7,'6401J','T87TTaew'),
+            (8,'3795J','RrtLvTjq'),
+            (9,'4963J','czxaATmj'),
+            (10,'9461J','ciaCbj3G'),
+            (11,'6822J','TnNJVYcr'),
+            (12,'8722J','sacNBtvw'),
+            (13,'9829J','DcQDLK6Y'),
+            (14,'5339J','9gZHdhdn'),
+            (15,'3319J','CHVtZ64X'),
+            (16,'5237J','5jCQMgyB'),
+            (17,'5135J','Xtd3h6r4'),
+            (18,'2888J','oaarFeen'),
+            (19,'4863J','5m5HjigG'),
+            (20,'2725J','cHyiySqn'),
+            (21,'2410J','3qNLnWiX'),
+            (22,'4652J','VzdmujuZ'),
+            (23,'5293J','3ZqH7DNX'),
+            (24,'6698J','EB-2247U'),
+            (25,'6911J','ZGtc4ouy'),
+            (26,'4396J','ZGtc4ouy'),
+            (27,'2745J','YFwXnJyj'),
+            (28,'9817J','uqfYPc4V'),
+            (29,'9382J','qH9HumL9')
             ";
     $this->_db->execute($sql);
 

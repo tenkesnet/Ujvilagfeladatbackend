@@ -36,6 +36,19 @@ class MysqlDatabase implements Database
         return False;
     }
 
+    public function existsRow(string $sql): bool
+    {
+        error_log("exists row: " . $sql);
+        if ($result = $this->_conn->query($sql)) {
+            if ($result->num_rows > 0) {
+                return True;
+            } else {
+                return False;
+            }
+        }
+        return false;
+    }
+
     public function execute(string $sql): bool
     {
         return $this->_conn->query($sql);

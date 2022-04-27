@@ -34,14 +34,17 @@ class ProductRepository
             FROM
                 products p
             JOIN productname pn ON
-                pn.id = p.productnameid
+                pn.productid = p.id 
             JOIN stocks s ON
                 s.productid = p.id
+            WHERE
+                pn.language='hu'
             GROUP BY
                 p.id
     ");
         foreach ($results as $p) {
-            $product = new Product(
+            $product = new Product();
+            $product->fill(
                 $p['pid'] + 0,
                 $p['sid'] + 0,
                 $p['name'],
@@ -79,16 +82,19 @@ class ProductRepository
             FROM
                 products p
             JOIN productname pn ON
-                pn.id = p.productnameid
+                pn.productid = p.id
             JOIN stocks s ON
                 s.productid = p.id
             JOIN employees e ON
                 s.employeeid = e.id
             WHERE
                 p.id =" . $id . "
+            AND
+                pn.language='hu'
     ");
         foreach ($results as $p) {
-            $product = new Product(
+            $product = new Product();
+            $product->fill(
                 $p['pid'] + 0,
                 $p['sid'] + 0,
                 $p['name'],
@@ -126,7 +132,7 @@ class ProductRepository
             FROM
                 products p
             JOIN productname pn ON
-                pn.id = p.productnameid
+                pn.productid = p.id
             JOIN stocks s ON
                 s.productid = p.id
             JOIN employees e ON
@@ -135,9 +141,12 @@ class ProductRepository
                 p.id =" . $pid . "
             AND
                 s.id =" . $sid . "
+            AND
+                pn.language='hu'
     ");
         $p = $result[0];
-        $product = new Product(
+        $product = new Product();
+        $product->fill(
             $p['pid'] + 0,
             $p['sid'] + 0,
             $p['name'],
@@ -172,16 +181,20 @@ class ProductRepository
             FROM
                 products p
             JOIN productname pn ON
-                pn.id = p.productnameid
+                pn.productid = p.id
             JOIN stocks s ON
                 s.productid = p.id
             WHERE
                 " . $field . " like '%" . $value . "%'
+            AND
+                pn.language='hu'
             GROUP BY
                 p.id
     ");
+
         foreach ($results as $p) {
-            $product = new Product(
+            $product = new Product();
+            $product->fill(
                 $p['id'] + 0,
                 0,
                 $p['name'],
@@ -201,5 +214,13 @@ class ProductRepository
     }
     public function updateProduct(Product $p)
     {
+        $sql = "select language from productname where productid=" . $p->productid . " and language='" . $p->language . "'";
+        if ($this->_db->existsRow($sql)) {
+            error_log("EXISTS ROW");
+            $sql = "update productname set name = '" . $p->name .
+                "' where productid=" . $p->productid . " and language='" . $p->language . "'";
+            $this->_db->execute($sql);
+        }
+        error_log("updateproduct: " . print_r($p, true));
     }
 }

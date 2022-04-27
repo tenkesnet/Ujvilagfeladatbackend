@@ -20,7 +20,7 @@ class Product
   public int $employeeId;
   public array $employees;
 
-  function __construct(
+  public function fill(
     int $productid,
     int $stockid,
     ?string $name,
